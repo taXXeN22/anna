@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анна Молчановская — художник по горячей эмали</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Playfair+Display:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <style>
+    /* Общие стили */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f1ea;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    a {
+      text-decoration: none;
+      color: #555;
+    }
+
+    a:hover {
+      color: #000;
+    }
+
+    /* Шапка */
+    header {
+      text-align: center;
+      padding: 100px 20px;
+      background-color: #2c3e50;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin: 0;
+      color: #ffd700;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #ddd;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    }
+
+    header.visible h1,
+    header.visible p {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Бургер-меню */
+    .burger-menu {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .burger-menu div {
+      width: 30px;
+      height: 3px;
+      background-color: #ffd700;
+      transition: all 0.3s ease;
+    }
+
+    .burger-menu.active div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .burger-menu.active div:nth-child(2) {
+      opacity: 0;
+    }
+
+    .burger-menu.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: #2c3e50;
+      z-index: 999;
+      transition: right 0.3s ease;
+      padding-top: 60px;
+    }
+
+    .nav-menu.active {
+      right: 0;
+    }
+
+    .nav-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-menu ul li {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .nav-menu ul li a {
+      color: #fff;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu ul li a:hover {
+      color: #ffd700;
+    }
+
+    /* Основные секции */
+    section {
+      padding: 80px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      color: #555;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Галерея */
+    .swiper-container {
+      width: 100%;
+      height: 500px;
+      margin: 40px 0;
+    }
+
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #eee;
+    }
+
+    .swiper-slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+
+    /* Карусель отзывов */
+    .testimonials-carousel {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .testimonial {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff; /* Светлый фон для отзывов */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 0 10px; /* Расстояние между отзывами */
+    }
+
+    .testimonial p {
+      font-style: italic;
+      color: #555;
+      font-size: 1.2rem; /* Увеличенный размер текста */
+    }
+
+    .testimonial-author {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #2c3e50;
+      font-size: 1.1rem; /* Увеличенный размер текста */
+    }
+
+    /* Контакты */
+    #contacts {
+      background-color: #fff;
+      border-top: 1px solid #eee;
+    }
+
+    #contacts form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    #contacts input, #contacts textarea {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    #contacts button {
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #2c3e50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    #contacts button:hover {
+      background-color: #1a252f;
+    }
+
+    /* Подвал */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #2c3e50;
+      color: #ddd;
+    }
+
+    /* Изображения */
+    .section-image {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      section {
+        padding: 40px 20px;
+      }
+
+      section h2 {
+        font-size: 2rem;
+      }
+
+      .swiper-container {
+        height: 300px;
+      }
+
+      .testimonials-carousel {
+        padding: 10px;
+      }
+
+      .testimonial p {
+        font-size: 1rem;
+      }
+
+      .testimonial-author {
+        font-size: 0.9rem;
+      }
+
+      #contacts form {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="burger-menu" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav class="nav-menu" id="navMenu">
+    <ul>
+      <li><a href="#about" onclick="toggleMenu()">О художнике</a></li>
+      <li><a href="#technique" onclick="toggleMenu()">Техника</a></li>
+      <li><a href="#process" onclick="toggleMenu()">Процесс</a></li>
+      <li><a href="#gallery" onclick="toggleMenu()">Галерея</a></li>
+      <li><a href="#exhibitions" onclick="toggleMenu()">Выставки</a></li>
+      <li><a href="#testimonials" onclick="toggleMenu()">Отзывы</a></li>
+      <li><a href="#blog" onclick="toggleMenu()">Блог</a></li>
+      <li><a href="#contacts" onclick="toggleMenu()">Контакты</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>Анна Молчановская</h1>
+    <p>Художник по горячей эмали</p>
+  </header>
+
+  <section id="about">
+    <h2>О художнике</h2>
+    <p>Анна Молчановская — современный художник, работающий в технике горячей эмали. Ее работы посвящены церковной тематике: иконы и образы, созданные с глубоким уважением к традициям и духовному наследию. Анна начала свой творческий путь более 10 лет назад, изучая древние техники и адаптируя их к современному искусству.</p>
+    <img src="https://i.imgur.com/ARGgp.jpeg" alt="Художник за работой" class="section-image">
+  </section>
+
+  <section id="technique">
+    <h2>Техника горячей эмали</h2>
+    <p>Горячая эмаль — это древняя техника, сочетающая в себе живопись и ювелирное искусство. Анна использует специальные стеклянные порошки, которые наносятся на металлическую основу и обжигаются при высоких температурах, создавая уникальные произведения искусства. Каждый этап работы требует точности и терпения, а результат — это яркие, долговечные и духовно наполненные произведения.</p>
+    <img src="https://i.imgur.com/ARGgp.jpeg" alt="Техника горячей эмали" class="section-image">
+  </section>
+
+  <section id="process">
+    <h2>Процесс создания</h2>
+    <p>Создание каждой работы начинается с эскиза, который переносится на металлическую основу. Затем художник наносит слои стеклянного порошка, которые обжигаются в печи при температуре до 800°C. Этот процесс повторяется несколько раз, пока работа не приобретёт нужную глубину и цвет. Финальный этап — полировка и покрытие защитным слоем.</p>
+    <img src="https://i.imgur.com/ARGgp.jpeg" alt="Процесс создания" class="section-image">
+  </section>
+
+  <section id="gallery">
+    <h2>Примеры работ</h2>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="https://i.imgur.com/ARGgp.jpeg" alt="Икона 1"></div>
+        <div class="swiper-slide"><img src="https://i.imgur.com/ARGgp.jpeg" alt="Икона 2"></div>
+        <div class="swiper-slide"><img src="https://i.imgur.com/ARGgp.jpeg" alt="Икона 3"></div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </section>
+
+  <section id="exhibitions">
+    <h2>Выставки и события</h2>
+    <p>Работы Анны Молчановской были представлены на многочисленных выставках в России и за рубежом. Среди них — выставка "Духовное наследие" в Москве, международная выставка религиозного искусства в Париже и ежегодная ярмарка современного искусства в Санкт-Петербурге.</p>
+    <img src="https://i.imgur.com/ARGgp.jpeg" alt="Выставка" class="section-image">
+  </section>
+
+  <section id="testimonials">
+    <h2>Отзывы</h2>
+    <div class="testimonials-carousel swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="testimonial">
+            <p>"Работы Анны поражают своей глубиной и духовной силой. Каждая икона — это не просто произведение искусства, а настоящая молитва в красках."</p>
+            <div class="testimonial-author">— Отец Сергий, священник</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial">
+            <p>"Техника горячей эмали требует невероятного мастерства, и Анна демонстрирует его в каждой своей работе."</p>
+            <div class="testimonial-author">— Искусствовед Мария Иванова</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial">
+            <p>"Иконы Анны Молчановской — это сочетание традиций и современности. Они вдохновляют и заставляют задуматься о вечном."</p>
+            <div class="testimonial-author">— Коллекционер Алексей Петров</div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <h2>Блог</h2>
+    <p>В своём блоге Анна делится мыслями о творчестве, вдохновении и процессе создания работ. Читайте последние записи:</p>
+    <ul>
+      <li><a href="#">Как рождается икона: от эскиза до финального обжига</a></li>
+      <li><a href="#">История техники горячей эмали: от древности до наших дней</a></li>
+      <li><a href="#">Духовное искусство в современном мире</a></li>
+    </ul>
+  </section>
+
+  <section id="contacts">
+    <h2>Контакты</h2>
+    <form action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="text" name="name" placeholder="Ваше имя" required>
+      <input type="email" name="email" placeholder="Ваш email" required>
+      <textarea name="message" placeholder="Ваше сообщение" required></textarea>
+      <button type="submit">Отправить</button>
+    </form>
+    <p>Email: anna@example.com</p>
+    <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+  </section>
+
+  <footer>
+    <p>© 2025 Анна Молчановская. Все права защищены.</p>
+  </footer>
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    const sections = document.querySelectorAll('section');
+    const header = document.querySelector('header');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => observer.observe(section));
+
+    setTimeout(() => {
+      header.classList.add('visible');
+    }, 500);
+
+    // Инициализация Swiper для галереи
+    var gallerySwiper = new Swiper('#gallery .swiper-container', {
+      loop: true,
+      slidesPerView: 1.5,
+      centeredSlides: true,
+      spaceBetween: 20,
+      autoplay: {
+        delay: 3000, // Медленная прокрутка каждые 3 секунды
+        disableOnInteraction: false,
+      },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    });
+
+    // Инициализация Swiper для отзывов
+    var testimonialsSwiper = new Swiper('#testimonials .swiper-container', {
+      loop: true,
+      spaceBetween: 20, // Расстояние между отзывами
+      pagination: { el: '.swiper-pagination', clickable: true },
+    });
+
+    function toggleMenu() {
+      const burgerMenu = document.querySelector('.burger-menu');
+      const navMenu = document.getElementById('navMenu');
+      burgerMenu.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
